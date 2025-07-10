@@ -1,11 +1,18 @@
-# Use OpenJDK base image
-FROM openjdk:17-jdk-alpine
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-# Set a path variable for the JAR file
-ARG JAR_FILE=target/*.jar
+WORKDIR /app
 
-# Copy the JAR file to the container
-COPY ${JAR_FILE} app.jar
+COPY pom.xml .
+COPY src ./src
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
