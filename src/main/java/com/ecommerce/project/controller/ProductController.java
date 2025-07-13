@@ -4,10 +4,10 @@ import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDto;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,6 @@ public class ProductController {
 
     @Autowired
     private ProductService service;
-
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 
     @PostMapping("/admin/categories/{categoryId}/Product")
     public ResponseEntity<ProductDto> addProduct(@Valid  @RequestBody ProductDto productDto, @PathVariable Long categoryId){
