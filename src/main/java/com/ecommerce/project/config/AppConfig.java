@@ -38,12 +38,17 @@ public class AppConfig {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                    .allowedOrigins("http://localhost:5173") // your frontend
+                   .allowedOrigins(
+                "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
+                " eco-store-five.vercel.app",
+                "http://localhost:5173"
+            )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
                     .allowCredentials(true); // needed if using cookies/JWT
         }
     }
+    
     @Bean
     public CommandLineRunner initCategories(CategoryRepository categoryRepository) {
         return args -> {

@@ -13,7 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+@CrossOrigin(
+    origins = {
+        "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
+                " eco-store-five.vercel.app",
+        "http://localhost:5173"
+    },
+    allowCredentials = "true"
+)
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
