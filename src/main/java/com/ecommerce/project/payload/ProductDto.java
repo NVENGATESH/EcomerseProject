@@ -25,6 +25,10 @@ public class ProductDto {
     private double price;
     private double discount;
     private double specialPrice;
+    private String brand;
+    private Long categoryId;
+    private Long CartId;
+
 
 
 //
