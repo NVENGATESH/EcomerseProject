@@ -1,12 +1,15 @@
 package com.ecommerce.project.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -30,6 +33,7 @@ public class Product {
     private double price;
     private double discount;
     private double specialPrice;
+    private String brand;
 
 
     private String imageName;
@@ -43,4 +47,12 @@ public class Product {
     @JoinColumn(name = "category_Id")
     @com.fasterxml.jackson.annotation.JsonBackReference
     private Category category;
+
+
+    // A product can exist in multiple carts
+    // ✅ Correct side of the relationship
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    @JsonBackReference
+    private Cart cart;
 }

@@ -2,10 +2,12 @@ package com.ecommerce.project.service;
 
 import com.ecommerce.project.eception.ApiException;
 import com.ecommerce.project.eception.ResourceNotFoundException;
+import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDto;
 import com.ecommerce.project.payload.ProductResponse;
+import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,9 @@ public class ProductServiceImp  implements ProductService{
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private CartRepository cartrepository;
+
 
     @Autowired
     private ModelMapper modelMapper;
@@ -124,10 +129,39 @@ public class ProductServiceImp  implements ProductService{
 
     @Override
     public ProductDto deleteProduct(Long productId) {
-        Product product=productRepository.findById(productId).orElseThrow(()->new ResourceNotFoundException("product","productId",productId));
+//        Product product=productRepository.findById(productId).orElseThrow(()->new ResourceNotFoundException("product","productId",productId));
+//           Cart cart=    product.setCart(product.getCart());
+//           cart.setClicked(null);
+//            productRepository.delete(product);
+//        return modelMapper.map(product,ProductDto.class);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "productId", productId));
 
-            productRepository.delete(product);
-        return modelMapper.map(product,ProductDto.class);
+        // Break relationship with Cart if exists
+
+        Cart cart = product.getCart();
+//        cart.getId();
+        if (cart != null) {
+            Long id=  cart.getId();
+            Cart cart1 = cartrepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cart", "CartId", id));
+
+
+
+          cart1.setClicked(false);
+            cart1.setCount(0);
+            cart1.setAvailable(false);
+            cart.getProducts().remove(product); // remove product from cart's list
+            product.setCart(null);
+        }
+
+        // Map to DTO before deletion (optional)
+        ProductDto dto = modelMapper.map(product, ProductDto.class);
+
+        // Delete the product
+        productRepository.delete(product);
+
+        return dto;
     }
 
     @Override
@@ -150,21 +184,107 @@ public class ProductServiceImp  implements ProductService{
 
 
 
-    @Override
-    public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+//    @Override
+//    public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
+//        Category category = categoryRepository.findById(categoryId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+//
+//        Product product = modelMapper.map(productDto, Product.class);
+//        product.setCategory(category);
+//        product.setImageName(imageFile.getOriginalFilename());
+//        product.setImageType(imageFile.getContentType());
+//        product.setImageData(imageFile.getBytes());
+//
+//        Product savedProduct = productRepository.save(product);
+//        return modelMapper.map(savedProduct, ProductDto.class);
+//    }
 
-        Product product = modelMapper.map(productDto, Product.class);
-        product.setCategory(category);
+//    public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
+//        Category category = categoryRepository.findById(categoryId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+//
+//        Product product = modelMapper.map(productDto, Product.class);
+//        product.setCategory(category);
+//
+//        if (imageFile != null) {
+//            product.setImageName(imageFile.getOriginalFilename());
+//            product.setImageType(imageFile.getContentType());
+//            product.setImageData(imageFile.getBytes());
+//        }
+//
+//        Product savedProduct = productRepository.save(product);
+//        return modelMapper.map(savedProduct, ProductDto.class);
+//    }
+@Override
+public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
+    Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+
+    Product product = modelMapper.map(productDto, Product.class);
+    product.setCategory(category);
+
+    if (imageFile != null) {
         product.setImageName(imageFile.getOriginalFilename());
         product.setImageType(imageFile.getContentType());
         product.setImageData(imageFile.getBytes());
-
-        Product savedProduct = productRepository.save(product);
-        return modelMapper.map(savedProduct, ProductDto.class);
     }
 
+    Product savedProduct = productRepository.save(product);
+    return modelMapper.map(savedProduct, ProductDto.class);
+}
 
+    @Override
+    public ProductDto updateProductWithImage(Long ProductId, ProductDto productDto, MultipartFile imageFile) throws IOException {
+        Product product1 = productRepository.findById(ProductId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", ProductId));
+
+        // ✅ Fetch category from DB if provided in DTO
+//    if (productDto.ge() != null) {
+//        Category category = categoryRepository.findById(productDto.getCategoryId())
+//                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", productDto.getCategoryId()));
+//        product1.setCategory(category);
+//    }/
+
+        // ✅ Update other fields
+        product1.setProductName(productDto.getProductName());
+        product1.setDescription(productDto.getDescription());
+        product1.setQuantity(productDto.getQuantity());
+        product1.setDiscount(productDto.getDiscount());
+        product1.setPrice(productDto.getPrice());
+        product1.setSpecialPrice(productDto.getSpecialPrice());
+        product1.setBrand(productDto.getBrand());
+
+        // ✅ Update image if provided
+        if (imageFile != null && !imageFile.isEmpty()) {
+            product1.setImageName(imageFile.getOriginalFilename());
+            product1.setImageType(imageFile.getContentType());
+            product1.setImageData(imageFile.getBytes());
+        }
+
+        Product savedProduct = productRepository.save(product1);
+        return modelMapper.map(savedProduct, ProductDto.class);
+
+    }
+    @Override
+    public ProductDto getAllProductid(Long productId) {
+
+        Product  product=productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("product","productId",productId));
+        return modelMapper.map(product, ProductDto.class);
+    }
+
+    @Override
+    public String getProductname(Long productId) {
+        Product  product=productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("product","productId",productId));
+        return product.getProductName();
+    }
+
+    @Override
+    public String getProductBrand(Long productId) {
+        Product  product=productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("product","productId",productId));
+        return product.getBrand();
+    }
 }
 

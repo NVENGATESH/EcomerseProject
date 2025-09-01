@@ -37,7 +37,25 @@ public class ProductController {
         ProductResponse productResponse=service.getAllProduct();
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
+    @GetMapping("/public/products/{productId}")
+    public  ResponseEntity<ProductDto> getAllProductid(@PathVariable Long productId){
 
+        ProductDto productResponse=service.getAllProductid(productId);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
+    @GetMapping("/public/productname/{productId}")
+    public  ResponseEntity<String> getAllProductidproductname(@PathVariable Long productId){
+
+        String productResponse=service.getProductname(productId);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
+
+    @GetMapping("/public/productbrand/{productId}")
+    public  ResponseEntity<String> getProductBrand(@PathVariable Long productId){
+
+        String productResponse=service.getProductBrand(productId);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
     @GetMapping("/public/categories/{categoryId}/products")
     public ResponseEntity<ProductResponse>  getAllProductByCategory(@PathVariable Long categoryId){
 
@@ -103,14 +121,74 @@ public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto 
 //        @PathVariable Long categoryId,
 //        @RequestPart("productDto") ProductDto productDto,
 //        @RequestPart("image") MultipartFile imageFile) throws IOException {
-@PostMapping(value = "/admin/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-public ResponseEntity<ProductDto> addProductWithImage(
-        @PathVariable Long categoryId,
-        @RequestPart("productDto") ProductDto productDto,
-        @RequestPart("image") MultipartFile imageFile) throws IOException {
-    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
-    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
-}
+//@PostMapping(value = "/admin/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//public ResponseEntity<ProductDto> addProductWithImage(
+//        @PathVariable Long categoryId,
+//        @RequestPart("productDto") ProductDto productDto,
+//        @RequestPart("image") MultipartFile imageFile) throws IOException {
+//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
+//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+//}
+//@PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//public ResponseEntity<ProductDto> addProductWithImage(
+//        @PathVariable Long categoryId,
+//        @RequestPart("productDto") ProductDto productDto,
+//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+//
+//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
+//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+//}
+//@PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//public ResponseEntity<ProductDto> addProductWithImage(
+//        @PathVariable Long categoryId,
+//        @RequestPart("productDto") ProductDto productDto,
+//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+//) throws IOException {
+//
+//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
+//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+//}
+
+    @PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductDto> addProductWithImage(
+            @PathVariable Long categoryId,
+            @RequestPart("productDto") ProductDto productDto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+    ) throws IOException {
+
+        ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
+        return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+    }
+
+//    @PutMapping(value = "/public/products/${ProductId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<ProductDto> updateProductWithImage(
+//            @PathVariable Long ProductId,
+//            @RequestPart("productDto") ProductDto productDto,
+//            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+//    ) throws IOException {
+//@PutMapping("/public/products/{ProductId}")
+//public ResponseEntity<?> updateProductWithImage(
+//        @PathVariable("ProductId") Long productId,
+//        @RequestPart("productDto") ProductDto productDto,
+//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+//) throws IOException {
+//
+//        ProductDto savedProductDto = service.updateProductWithImage(productId, productDto, imageFile);
+//        return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
+//    }
+
+    @PutMapping(value = "/public/products/{ProductId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> updateProductWithImage(
+            @PathVariable("ProductId") Long productId,
+            @RequestPart("productDto") ProductDto productDto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+    ) throws IOException {
+        ProductDto savedProductDto = service.updateProductWithImage(productId, productDto, imageFile);
+        return new ResponseEntity<>(savedProductDto, HttpStatus.OK);
+    }
+
+
+
 
 
 }

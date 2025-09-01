@@ -1,10 +1,20 @@
 package com.ecommerce.project.config;
 
 
+import com.ecommerce.project.model.Category;
+import com.ecommerce.project.repositories.CartRepository;
+import com.ecommerce.project.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Configuration
@@ -22,4 +32,40 @@ public class AppConfig {
         return new ObjectMapper();
     }
 
+    @Configuration
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                    .allowedOrigins("http://localhost:5173") // your frontend
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true); // needed if using cookies/JWT
+        }
+    }
+    @Bean
+    public CommandLineRunner initCategories(CategoryRepository categoryRepository) {
+        return args -> {
+            if (categoryRepository.count() == 0) { // only insert if empty
+                categoryRepository.saveAll(List.of(
+                        new Category(1L, "Laptop", null),
+                        new Category(2L, "Headphone", null),
+                        new Category(3L, "Mobile", null),
+                        new Category(4L, "Electronics", null),
+                        new Category(5l, "Toys", null),
+                        new Category(6L, "Fashion", null)
+                ));
+            }
+        };
+    }
 }
+
+
+
+
+
+
+
+
+

@@ -27,4 +27,12 @@ public interface ProductService {
 
 
     ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException;
+
+    ProductDto updateProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException;
+
+    ProductDto getAllProductid(Long productId);
+
+    String getProductname(Long productId);
+
+    String getProductBrand(Long productId);
 }
