@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -31,6 +32,10 @@ public class AppConfig {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Configuration
     public class WebConfig implements WebMvcConfigurer {
@@ -38,32 +43,32 @@ public class AppConfig {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/**")
-                   .allowedOrigins(
-                "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
-                " eco-store-five.vercel.app",
-                "http://localhost:5173"
-            )
+                    .allowedOrigins(
+                            "https://eco-store-git-main-nvengateshs-projects.vercel.app",
+                            "https://eco-store-five.vercel.app",
+                            "http://localhost:5173"
+                    )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
-                    .allowCredentials(true); // needed if using cookies/JWT
+                    .allowCredentials(true);
         }
     }
     
-    @Bean
-    public CommandLineRunner initCategories(CategoryRepository categoryRepository) {
-        return args -> {
-            if (categoryRepository.count() == 0) { // only insert if empty
-                categoryRepository.saveAll(List.of(
-                        new Category(1L, "Laptop", null),
-                        new Category(2L, "Headphone", null),
-                        new Category(3L, "Mobile", null),
-                        new Category(4L, "Electronics", null),
-                        new Category(5l, "Toys", null),
-                        new Category(6L, "Fashion", null)
-                ));
-            }
-        };
-    }
+//    @Bean
+//    public CommandLineRunner initCategories(CategoryRepository categoryRepository) {
+//        return args -> {
+//            if (categoryRepository.count() == 0) { // only insert if empty
+//                categoryRepository.saveAll(List.of(
+//                        new Category(1L, "Laptop", null),
+//                        new Category(2L, "Headphone", null),
+//                        new Category(3L, "Mobile", null),
+//                        new Category(4L, "Electronics", null),
+//                        new Category(5l, "Toys", null),
+//                        new Category(6L, "Fashion", null)
+//                ));
+//            }
+//        };
+//    }
 }
 
 

@@ -35,4 +35,6 @@ public interface ProductService {
     String getProductname(Long productId);
 
     String getProductBrand(Long productId);
+
+    ProductResponse searchProductByKeyword(String keyword);
 }

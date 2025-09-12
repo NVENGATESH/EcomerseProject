@@ -55,4 +55,8 @@ public class Product {
     @JoinColumn(name = "cart_id")
     @JsonBackReference
     private Cart cart;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private User user;
 }

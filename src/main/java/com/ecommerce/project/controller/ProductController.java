@@ -18,7 +18,7 @@ import java.io.IOException;
 @CrossOrigin(
     origins = {
         "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
-    " eco-store-five.vercel.app",
+    "https://eco-store-five.vercel.app",
         "http://localhost:5173"
     },
     allowCredentials = "true"
@@ -70,18 +70,12 @@ public class ProductController {
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
     @GetMapping("/public/products/keyword/{keyword}")
-    public ResponseEntity<ProductResponse>  getProductByKeyword(@PathVariable String keyword){
-
-        ProductResponse productResponse=     service.searchByKeyWord(keyword);
-        return new ResponseEntity<>(productResponse,HttpStatus.FOUND);
+    public ResponseEntity<ProductResponse> getProductsByKeyword(@PathVariable String keyword){
+        ProductResponse productResponse = service.searchProductByKeyword(keyword);
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
-//    @PutMapping("/admin/products/{productId}")
-//    public ResponseEntity<ProductDto>  updateProduct(@RequestBody ProductDto productDto,@PathVariable Long productId){
-//
-//
-//        ProductDto updatingProductDto=  service.updateProduct(productId,productDto);
-//        return new ResponseEntity<>(updatingProductDto,HttpStatus.OK);
-//    }
+
+
 @PutMapping("/admin/products/{productId}")
 public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto productDto,@PathVariable Long productId ){
 
@@ -92,6 +86,7 @@ public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto 
 
     @DeleteMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDto>  deleteProduct(@PathVariable Long productId){
+        System.out.println("pid*********8"+productId);
 
 
         ProductDto seletedPrdoduct=  service.deleteProduct(productId);
@@ -122,39 +117,7 @@ public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto 
     }
 
 
-//    Image addigng Prioducrt
-//@PostMapping("/admin/categories/{categoryId}/products")
-//public ResponseEntity<ProductDto> addProductWithImage(@Valid
-//        @PathVariable Long categoryId,
-//        @RequestPart("productDto") ProductDto productDto,
-//        @RequestPart("image") MultipartFile imageFile) throws IOException {
-//@PostMapping(value = "/admin/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//public ResponseEntity<ProductDto> addProductWithImage(
-//        @PathVariable Long categoryId,
-//        @RequestPart("productDto") ProductDto productDto,
-//        @RequestPart("image") MultipartFile imageFile) throws IOException {
-//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
-//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
-//}
-//@PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//public ResponseEntity<ProductDto> addProductWithImage(
-//        @PathVariable Long categoryId,
-//        @RequestPart("productDto") ProductDto productDto,
-//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-//
-//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
-//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
-//}
-//@PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//public ResponseEntity<ProductDto> addProductWithImage(
-//        @PathVariable Long categoryId,
-//        @RequestPart("productDto") ProductDto productDto,
-//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
-//) throws IOException {
-//
-//    ProductDto savedProductDto = service.addProductWithImage(categoryId, productDto, imageFile);
-//    return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
-//}
+
 
     @PostMapping(value = "/public/categories/{categoryId}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductDto> addProductWithImage(
@@ -167,22 +130,6 @@ public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto 
         return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
     }
 
-//    @PutMapping(value = "/public/products/${ProductId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<ProductDto> updateProductWithImage(
-//            @PathVariable Long ProductId,
-//            @RequestPart("productDto") ProductDto productDto,
-//            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
-//    ) throws IOException {
-//@PutMapping("/public/products/{ProductId}")
-//public ResponseEntity<?> updateProductWithImage(
-//        @PathVariable("ProductId") Long productId,
-//        @RequestPart("productDto") ProductDto productDto,
-//        @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
-//) throws IOException {
-//
-//        ProductDto savedProductDto = service.updateProductWithImage(productId, productDto, imageFile);
-//        return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
-//    }
 
     @PutMapping(value = "/public/products/{ProductId}", consumes = {"multipart/form-data"})
     public ResponseEntity<?> updateProductWithImage(
@@ -201,15 +148,4 @@ public ResponseEntity<ProductDto>  updateProduct(@Valid @RequestBody ProductDto 
 }
 
 
-//@PostMapping("/product")
-//public ResponseEntity<?> addProduct(@RequestPart Product product,@RequestPart MultipartFile imageFile){
-//
-//    try {
-//        Product product1=service.addProduct(product,imageFile);
-//        return  new ResponseEntity<>(product1,HttpStatus.CREATED );
-//    }
-//    catch (Exception e){
-//        return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
-//}

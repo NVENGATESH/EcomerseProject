@@ -10,6 +10,7 @@ import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,17 +94,33 @@ public class ProductServiceImp  implements ProductService{
 
     @Override
     public ProductResponse searchByKeyWord(String keyword) {
+        return null;
+    }
 
 
-        List<Product> products = productRepository.findByProductNameLikeIgnoreCase("%" + keyword + "%");
 
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse searchProductByKeyword(String keyword) {
+        List<Product> products = productRepository
+                .findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
 
-        List<ProductDto> productDtos=  products.stream().map(product ->  modelMapper.map(product,ProductDto.class)).collect(Collectors.toList());
+        if (products.isEmpty()) {
+            throw new ApiException("Products not found with keyword: " + keyword);
+        }
 
-        ProductResponse  productResponse=new ProductResponse();
-        productResponse.setContent(productDtos);
+        List<ProductDto> productDTOS = products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(productDTOS);
+
         return productResponse;
     }
+
+
+
 
     @Override
     public ProductDto updateProduct(Long productId, ProductDto productDto)  {
@@ -129,11 +146,7 @@ public class ProductServiceImp  implements ProductService{
 
     @Override
     public ProductDto deleteProduct(Long productId) {
-//        Product product=productRepository.findById(productId).orElseThrow(()->new ResourceNotFoundException("product","productId",productId));
-//           Cart cart=    product.setCart(product.getCart());
-//           cart.setClicked(null);
-//            productRepository.delete(product);
-//        return modelMapper.map(product,ProductDto.class);
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("product", "productId", productId));
 
@@ -153,6 +166,7 @@ public class ProductServiceImp  implements ProductService{
             cart1.setAvailable(false);
             cart.getProducts().remove(product); // remove product from cart's list
             product.setCart(null);
+            cartrepository.delete(cart1);
         }
 
         // Map to DTO before deletion (optional)
@@ -184,37 +198,6 @@ public class ProductServiceImp  implements ProductService{
 
 
 
-//    @Override
-//    public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
-//        Category category = categoryRepository.findById(categoryId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
-//
-//        Product product = modelMapper.map(productDto, Product.class);
-//        product.setCategory(category);
-//        product.setImageName(imageFile.getOriginalFilename());
-//        product.setImageType(imageFile.getContentType());
-//        product.setImageData(imageFile.getBytes());
-//
-//        Product savedProduct = productRepository.save(product);
-//        return modelMapper.map(savedProduct, ProductDto.class);
-//    }
-
-//    public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
-//        Category category = categoryRepository.findById(categoryId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
-//
-//        Product product = modelMapper.map(productDto, Product.class);
-//        product.setCategory(category);
-//
-//        if (imageFile != null) {
-//            product.setImageName(imageFile.getOriginalFilename());
-//            product.setImageType(imageFile.getContentType());
-//            product.setImageData(imageFile.getBytes());
-//        }
-//
-//        Product savedProduct = productRepository.save(product);
-//        return modelMapper.map(savedProduct, ProductDto.class);
-//    }
 @Override
 public ProductDto addProductWithImage(Long categoryId, ProductDto productDto, MultipartFile imageFile) throws IOException {
     Category category = categoryRepository.findById(categoryId)
