@@ -1,9 +1,25 @@
+spring:
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${***REMOVED***}
+    password: ${***REMOVED***}
+    properties:
+      mail:
+        smtp:
+          auth: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+            required: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED}
 
+app:
+  jwtCookieName: ${SPRING_APP_JWTCOOKIE_NAME}
+  jwtSecret: ${***REMOVED***}
+  jwtExpirationMs: ${SPRING_APP_JWTEXPIRATIONMS}
 
 spring:
   security:
     oauth2:
-      redirect-uri: ${SPRING_SECURITY_OAUTH2_REDIRECT_URI}
       client:
         registration:
           google:
@@ -19,4 +35,4 @@ spring:
             user-name-attribute: ${SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_GOOGLE_USER_NAME_ATTRIBUTE}
 
 server:
-  port: ${SERVER_PORT:8080} # fallback default 8080
+  port: ${SERVER_PORT}
