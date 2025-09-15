@@ -1,0 +1,34 @@
+[33m3009527[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Your commit message
+[33m10897e0[m Add safe .env.example template
+[33me877bb8[m Stop tracking application.yml
+[33m90cde04[m Add .gitignore to ignore env files
+[33m98b126f[m error chage
+[33m003e8ba[m Configured Spring Boot to use .env.dev and .env.prod for environment variables
+[33m13bd298[m all
+[33mfa719e0[m Use environment variables for OAuth2 config
+[33m91f586f[m outh2 implent
+[33m3ff33f2[m configchanges
+[33m7ab6bfe[m db check
+[33mb773697[m changdb
+[33maf7b24c[m adddd
+[33m08b7f1f[m dbcheck
+[33m654c4dc[m add
+[33mfec72ef[m git application property
+[33m59b7cad[m git updated cart
+[33mbd7d2d0[m updated all
+[33m13d58e1[m updatedbb
+[33mc2c397b[m updates db
+[33m53327dd[m update deepseek
+[33m65b87d3[m updates applicatio
+[33m623e967[m update apllication
+[33m013705e[m update error
+[33m4c3a2e7[m up
+[33mdfbf5dc[m updatedb
+[33md41d38d[m opm.xmlupdates
+[33m1cb4cda[m dbschanges
+[33mea27727[m dockerupdate
+[33m254eb39[m dbchanges
+[33m3d935e8[m dbchange
+[33m86e1068[m add dockerfile
+[33mc70a80f[m Initial commit
+[33m7973d64[m Initial commit
