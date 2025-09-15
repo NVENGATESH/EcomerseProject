@@ -45,7 +45,7 @@ public class AppConfig {
             registry.addMapping("/**")
                     .allowedOrigins(
                             "https://eco-store-git-main-nvengateshs-projects.vercel.app",
-                            "https://eco-store-five.vercel.app",
+                            "https://eco-store-lyart.vercel.app",
                             "http://localhost:5173"
                     )
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

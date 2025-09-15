@@ -5,8 +5,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${spring.security.oauth2.client.registration.google.client-id}
-            client-secret: ${spring.security.oauth2.client.registration.google.client-secret}
+            client-id: ${GOOGLE_CLIENT_ID_LOCAL}
+            client-secret: ${GOOGLE_CLIENT_SECRET_LOCAL}
             scope:
                           - openid
                           - profile

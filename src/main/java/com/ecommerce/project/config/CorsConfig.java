@@ -16,9 +16,9 @@ public class CorsConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins(
-             "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
-                "https://eco-store-five.vercel.app",
-                "http://localhost:5173"
+                    "https://eco-store-git-main-nvengateshs-projects.vercel.app",
+                    "https://eco-store-lyart.vercel.app",
+                    "http://localhost:5173"
             )
             .allowedMethods("*")
             .allowCredentials(true);

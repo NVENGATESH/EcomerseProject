@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(
         origins = {
-                "https://eco-store-git-main-nvengateshs-projects.vercel.app/",
-                "https://eco-store-five.vercel.app",
+                "https://eco-store-git-main-nvengateshs-projects.vercel.app",
+                "https://eco-store-lyart.vercel.app",
                 "http://localhost:5173"
         },
         allowCredentials = "true"
@@ -159,6 +159,34 @@ public class AuthController {
     }
 
     // ---------------- LOGOUT ----------------
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null) {
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//
+//        request.getSession().invalidate();
+//
+//        Cookie jwtCookie = new Cookie("globelTechJwt", null);
+//        jwtCookie.setHttpOnly(true);
+//        jwtCookie.setSecure(true);
+//        jwtCookie.setPath("/");
+//        jwtCookie.setMaxAge(0);
+//        response.addCookie(jwtCookie);
+//
+//        Cookie sessionCookie = new Cookie("JSESSIONID", null);
+//        sessionCookie.setHttpOnly(true);
+//        sessionCookie.setPath("/");
+//        sessionCookie.setMaxAge(0);
+//        response.addCookie(sessionCookie);
+//
+//        Map<String, Object> result = new HashMap<>();
+//        result.put("message", "Successfully logged out");
+//        result.put("oauth2LogoutUrl", "https://accounts.google.com/Logout");
+//
+//        return ResponseEntity.ok(result);
+//    }
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -168,25 +196,26 @@ public class AuthController {
 
         request.getSession().invalidate();
 
-        Cookie jwtCookie = new Cookie("globelTechJwt", null);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(0);
-        response.addCookie(jwtCookie);
+        // Delete JWT cookie
+        response.setHeader("Set-Cookie",
+                "globelTechJwt=; Max-Age=0; Path=/; Domain=localhost; Secure; HttpOnly; SameSite=None");
 
-        Cookie sessionCookie = new Cookie("JSESSIONID", null);
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setPath("/");
-        sessionCookie.setMaxAge(0);
-        response.addCookie(sessionCookie);
+        // Delete session cookie
+        response.addHeader("Set-Cookie",
+                "JSESSIONID=; Max-Age=0; Path=/; Domain=localhost; Secure; HttpOnly; SameSite=Lax");
 
+        // If OAuth2 -> also send Google logout link
         Map<String, Object> result = new HashMap<>();
         result.put("message", "Successfully logged out");
-        result.put("oauth2LogoutUrl", "https://accounts.google.com/Logout");
+
+        if (auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().startsWith("ROLE_OAUTH2_USER"))) {
+            result.put("oauth2LogoutUrl", "https://accounts.google.com/Logout");
+        }
 
         return ResponseEntity.ok(result);
     }
+
 
 
 

@@ -17,8 +17,9 @@ public class SimpleCorsFilter implements Filter {
 
     // Allowed frontend origins
     private static final List<String> allowedOrigins = Arrays.asList(
-            "http://localhost:5173",
-            "https://eco-store-git-main-nvengateshs-projects.vercel.app/"
+            "https://eco-store-git-main-nvengateshs-projects.vercel.app",
+            "https://eco-store-lyart.vercel.app",
+            "http://localhost:5173"
     );
 
     @Override

@@ -141,8 +141,9 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://localhost:5173",
-                                "https://65b8-2409-408d-1e1a-c914-4d06-c105-7587-8b74.ngrok-free.app"
+                                "https://eco-store-git-main-nvengateshs-projects.vercel.app",
+                                "https://eco-store-lyart.vercel.app",
+                                "http://localhost:5173"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
